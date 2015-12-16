@@ -6,54 +6,60 @@
 /*   By: nromptea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 14:38:11 by nromptea          #+#    #+#             */
-/*   Updated: 2015/12/16 13:51:58 by nromptea         ###   ########.fr       */
+/*   Updated: 2015/12/16 21:37:15 by nromptea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		get_next_line(int const fd)//, char **line)
+char	*ft_read(int fd, char *buff, char *cpy_buff, char *rest)
 {
-	char		buff[BUFF_SIZE + 1];
-	int			ret;
-	static char	*rest;
-	char		*cpy_buff;
-	int			i;
-	static int	si;
+	int		ret;
 
-	ret = read(fd, buff, BUFF_SIZE);
-	if (ret < 0)
-		return (-1);
-	buff[ret] = '\0';
-	cpy_buff = (char *)malloc(sizeof(char) * (BUFF_SIZE + 1));
-	if (si > 0)
-		cpy_buff = ft_strcpy(cpy_buff, rest);
-	while (buff[i])
+	if (!(ft_strchr(rest, '\n')))
 	{
-		if (buff[i] == '\n')
+		ret = read(fd, buff, BUFF_SIZE);
+		if (read > 0)
+			return (NULL);
+		cpy_buff = ft_strjoin(cpy_buff, buff);
+		while (!(ft_strchr(buff, '\n')))
 		{
-			buff[i] = '\0';
-			cpy_buff = ft_strncat(cpy_buff, buff, i);
-			rest = ft_strsub(buff, i + 1, (BUFF_SIZE - i)); 
+			ret = read(fd, buff, O_RDONLY);
+			cpy_buff = ft_strjoin(cpy_buff, buff);
 		}
-		else
-		{
-			cpy_buff = ft_strcpy(cpy_buff, buff);
-			i++;
-		}
-	}	
-	ft_putstr(cpy_buff);
-	return (1);
+	}
+	else
+		return (rest);
+	return (NULL);
+}
+
+
+char	*get_next_line(int const fd, char **line)
+{
+	char		*buff;
+	static char	*rest = NULL;
+	char		*cpy_buff;
+	int			read;
+
+	buff = ft_strnew(BUFF_SIZE);
+	if (fd < 0 || line == NULL || buff == NULL)
+		return (NULL);
+	cpy_buff = ft_read(fd, buff, cpy_buff, rest);
+	*line = ft_strchr(cpy_buff, '\n');
+	rest = ft_strsub(rest, ft_strlen(*line), (ft_strlen(cpy_buff) - ft_strlen(*line)));
+	ft_putstr(*line);
+	return (*line);
 }
 
 int	main(int argc, char **argv)
 {
-	int	fd;
+	char	**line;
+	int		fd;
 
 	if (argc)
 	{
 		fd = open(argv[1], O_RDONLY);
-		get_next_line(fd);
+		get_next_line(fd, line);
 	}
 	return (0);
-}	
+}
