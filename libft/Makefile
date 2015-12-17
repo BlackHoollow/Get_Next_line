@@ -6,7 +6,7 @@
 #    By: nromptea <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/08/25 13:59:57 by mbinet            #+#    #+#              #
-#    Updated: 2015/12/11 16:22:18 by nromptea         ###   ########.fr        #
+#    Updated: 2015/12/17 16:42:45 by nromptea         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,11 +82,12 @@ SRC =	ft_atoi.c\
 	ft_lstrev.c\
 
 SROBJ = $(SRC:.c=.o)
+INC = ./includes/
 
 all: $(NAME)
 
 $(NAME): $(SRO)
-	gcc -Wall -Werror -Wextra -c $(SRC)
+	gcc -Wall -Werror -Wextra -I $(INC) -c $(SRC)
 	ar rc $(NAME) $(SROBJ)
 	ranlib $(NAME)
 

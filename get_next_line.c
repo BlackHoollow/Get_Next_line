@@ -6,60 +6,63 @@
 /*   By: nromptea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 14:38:11 by nromptea          #+#    #+#             */
-/*   Updated: 2015/12/16 21:37:15 by nromptea         ###   ########.fr       */
+/*   Updated: 2015/12/17 16:56:34 by nromptea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "get_next_line.h"
 
 char	*ft_read(int fd, char *buff, char *cpy_buff, char *rest)
 {
-	int		ret;
+	int			ret;
 
-	if (!(ft_strchr(rest, '\n')))
+	if ((ft_strchr(rest, '\n') == NULL) &&
+			(ret = read(fd, buff, BUFF_SIZE) > 0))
 	{
-		ret = read(fd, buff, BUFF_SIZE);
-		if (read > 0)
-			return (NULL);
-		cpy_buff = ft_strjoin(cpy_buff, buff);
-		while (!(ft_strchr(buff, '\n')))
+		cpy_buff = ft_strjoin(cpy_buff, rest);
+		while ((ft_strchr(buff, '\n') == NULL))
 		{
-			ret = read(fd, buff, O_RDONLY);
-			cpy_buff = ft_strjoin(cpy_buff, buff);
+			if ((ret = read(fd, buff, O_RDONLY)) > 0)
+				cpy_buff = ft_strjoin(cpy_buff, buff);
+			else
+				return (NULL);
 		}
+		return (cpy_buff);
 	}
-	else
+	else if ((ft_strchr(rest, '\n') != NULL))
 		return (rest);
 	return (NULL);
 }
 
+char	*ft_choppe_first(char *cpy_buff)
+{
+	char	*line;
+	int		len;
 
-char	*get_next_line(int const fd, char **line)
+	len = 0;
+	while (cpy_buff[len] != '\n')
+		len++;
+	line = ft_strnew(len - 1);
+	line = ft_strncpy(line, cpy_buff, len - 1);
+	return (line);
+}
+
+int		get_next_line(int const fd, char **line)
 {
 	char		*buff;
 	static char	*rest = NULL;
 	char		*cpy_buff;
-	int			read;
 
+	cpy_buff = NULL;
 	buff = ft_strnew(BUFF_SIZE);
 	if (fd < 0 || line == NULL || buff == NULL)
-		return (NULL);
+		return (-1);
 	cpy_buff = ft_read(fd, buff, cpy_buff, rest);
-	*line = ft_strchr(cpy_buff, '\n');
-	rest = ft_strsub(rest, ft_strlen(*line), (ft_strlen(cpy_buff) - ft_strlen(*line)));
-	ft_putstr(*line);
-	return (*line);
-}
-
-int	main(int argc, char **argv)
-{
-	char	**line;
-	int		fd;
-
-	if (argc)
-	{
-		fd = open(argv[1], O_RDONLY);
-		get_next_line(fd, line);
-	}
-	return (0);
+	if (cpy_buff == NULL)
+		return (0);
+	rest = ft_strdup((ft_strchr(cpy_buff, '\n')) + 1);
+	*line = ft_choppe_first(cpy_buff);
+	ft_strdel(cpy_buff);
+	return (1);
 }
