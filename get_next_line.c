@@ -6,7 +6,7 @@
 /*   By: nromptea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 14:38:11 by nromptea          #+#    #+#             */
-/*   Updated: 2016/01/06 15:39:40 by nromptea         ###   ########.fr       */
+/*   Updated: 2016/01/07 16:22:23 by nromptea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,32 +52,26 @@ char	*first_line(char *cpy_buff)
 	return (line);
 }
 
-char	*cut_line(char *cpy_buff)
-{
-	int		len;
-	int		i;
-	char	*rest;
-
-	len = ft_strlen(cpy_buff);
-	while (cpy_buff[i] != '\n')
-		i++;
-	rest = ft_strsub(cpy_buff, (i + 1), len);
-	return (rest);
-}
-
 int		get_next_line(int const fd, char **line)
 {
-	char		*cpy_buff;
-	static char	*rest = NULL;
+	char			*cpy_buff;
+	static char		*rest = NULL;
 
 	cpy_buff = NULL;
-	cpy_buff = ft_read_all(cpy_buff, fd);
+	if (fd < 0)
+		return (-1);
+	if (rest == NULL)
+		cpy_buff = ft_read_all(cpy_buff, fd);
+	else
+		cpy_buff = rest;
 	*line = first_line(cpy_buff);
-//	rest = cut_line(cpy_buff);
-	return (1);
+	rest = ft_strchr(cpy_buff, '\n') + 1;
+	if (rest != NULL)
+		return (1);
+	return (0);
 }
 
-int	main(int argc, char **argv)
+/*int	main(int argc, char **argv)
 {
 	int	fd;
 	int	ret;
@@ -87,8 +81,21 @@ int	main(int argc, char **argv)
 	if (argc)
 	{
 		fd = open(argv[1], O_RDONLY);
+		
 		ret = get_next_line(fd, &line);
-		ft_putstr(line);
+		ft_putendl(line);
+		
+		ret = get_next_line(fd, &line);
+		ft_putendl(line);
+		
+		ret = get_next_line(fd, &line);
+		ft_putendl(line);
+		
+		ret = get_next_line(fd, &line);
+		ft_putendl(line);
+
+		ret = get_next_line(fd, &line);
+		ft_putendl(line);
 	}
 	return (0);
-}
+}*/
