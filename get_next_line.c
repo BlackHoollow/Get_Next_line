@@ -6,7 +6,7 @@
 /*   By: nromptea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 14:38:11 by nromptea          #+#    #+#             */
-/*   Updated: 2016/01/07 19:26:29 by nromptea         ###   ########.fr       */
+/*   Updated: 2016/01/08 22:21:33 by nromptea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,29 +24,31 @@ int		is_backslash(char *str)
 			return (1);
 		i++;
 	}
+		ft_putendl("coucou");
 	return (0);
 }
 
-int		ft_read(char **cpy_buff, char *rest, int fd)
+int		ft_read(char **rest, int fd)
 {
 	int		ret;
-	char	buff[BUFF_SIZE + 1];
-	char	*tmp;
-	
-	if ((is_backslash(rest) == 0))
+	char	*buff;
+	char	*swp;
+	char	*c;
+
+	buff = ft_strnew(BUFF_SIZE);
+	while (!(c = ft_strchr(*rest, '\n')) && (ret = read(fd, buff, BUFF_SIZE)) > 0)
 	{
-		while (is_backslash(buff) == 0)
-		{
-			ret = read(fd, buff, BUFF_SIZE);
-			if (ret == 0)
-				return (0);
-			if (ret < 0)
-				return (-1);
-			buff[ret] = '\0';
-			tmp = ft_strjoin(tmp, buff);
-		}
+		ft_putendl("coucou");
+		buff[ret] = '\0';
+		swp = *rest;
+		*rest = ft_strjoin(swp, buff);
+		ft_strdel(&swp);
 	}
-	*cpy_buff = tmp;
+	ft_strdel(&buff);
+	if (ret == -1)
+		return (-1);
+	if (ret == 0 && !c)
+		return (0);
 	return (1);
 }
 
@@ -64,18 +66,23 @@ char	*first_line(char *cpy_buff)
 
 int		get_next_line(int const fd, char **line)
 {
-	char			*cpy_buff;
-	static char		*rest = NULL;
+	static char		*rest;
 	int				ret;
+	char			*swp;
 
-	cpy_buff = NULL;
-	ret = ft_read(&cpy_buff, rest, fd);
+	ret = ft_read(&rest, fd);
 	if (ret == -1)
 		return (-1);
-	*line = first_line(cpy_buff);
-	rest = ft_strchr(cpy_buff, '\n') + 1;
 	if (ret == 0)
+	{
+		*line = rest;
+		rest = NULL;
 		return (0);
+	}
+	*line = first_line(rest);
+	swp = rest;
+	rest = ft_strdup(ft_strchr(rest, '\n') + 1);
+	ft_strdel(&swp);
 	return (1);
 }
 
