@@ -6,7 +6,7 @@
 /*   By: nromptea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/17 16:23:11 by nromptea          #+#    #+#             */
-/*   Updated: 2016/01/11 15:49:03 by nromptea         ###   ########.fr       */
+/*   Updated: 2016/01/26 15:26:46 by nromptea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 # define BUFF_SIZE 10
 
-int		ft_read(int fd, char *rest[fd]);
-char	*first_line(char *cpy_buff);
 int		get_next_line(int const fd, char **line);
 
 #endif
