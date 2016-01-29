@@ -1,20 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nromptea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/17 16:23:11 by nromptea          #+#    #+#             */
-/*   Updated: 2016/01/29 17:49:21 by nromptea         ###   ########.fr       */
+/*   Created: 2016/01/29 13:42:55 by nromptea          #+#    #+#             */
+/*   Updated: 2016/01/29 18:17:19 by nromptea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "get_next_line.h"
+#include "libft.h"
+#include <stdio.h>
 
-# define BUFF_SIZE 100
+int		main(int argc, char **argv)
+{
+	int		fd;
+	char	*line;
+	int		ret;
 
-int		get_next_line(int const fd, char **line);
-
-#endif
+	argc = argc + 0;
+	fd = open(argv[1], O_RDONLY);
+	while ((ret = get_next_line(fd, &line)) == 1)
+	{
+		printf("%d : %s\n", ret, line);
+	}
+	return (0);
+}

@@ -6,7 +6,7 @@
 /*   By: nromptea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 14:38:11 by nromptea          #+#    #+#             */
-/*   Updated: 2016/01/26 15:24:18 by nromptea         ###   ########.fr       */
+/*   Updated: 2016/01/29 18:42:04 by nromptea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,11 @@ static char		*first_line(char *cpy_buff)
 
 int				get_next_line(int const fd, char **line)
 {
-	static char		*rest[1024];
+	static char		*rest[256];
 	int				ret;
 	char			*swp;
 
-	if (fd < 0 || line == NULL)
+	if (fd < 0 || fd > 255 || line == NULL)
 		return (-1);
 	if (rest[fd] == NULL)
 		rest[fd] = ft_strnew(1);
