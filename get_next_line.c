@@ -6,7 +6,7 @@
 /*   By: nromptea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 14:38:11 by nromptea          #+#    #+#             */
-/*   Updated: 2016/02/01 16:19:48 by nromptea         ###   ########.fr       */
+/*   Updated: 2016/02/01 16:53:19 by nromptea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,7 @@ int				get_next_line(int const fd, char **line)
 
 	if (fd < 0 || fd > 255 || line == NULL)
 		return (-1);
-	if (rest[fd] == NULL)
-		rest[fd] = ft_strnew(1);
+	rest[fd] = rest[fd] == NULL ? ft_strnew(1) : rest[fd];
 	ret = ft_read(fd, &*rest);
 	if (ret == -1)
 		return (-1);

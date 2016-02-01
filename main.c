@@ -6,7 +6,7 @@
 /*   By: nromptea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/29 13:42:55 by nromptea          #+#    #+#             */
-/*   Updated: 2016/02/01 16:30:17 by nromptea         ###   ########.fr       */
+/*   Updated: 2016/02/01 16:53:47 by nromptea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,11 @@ int		main(int argc, char **argv)
 	int		ret;
 
 	argc = argc + 0;
-	fd = open("dev/random", O_RDONLY);
+	fd = open(argv[1], O_RDONLY);
 	while ((ret = get_next_line(fd, &line)) == 1)
 	{
 		printf("%d : %s\n", ret, line);
+		ft_strdel(&line);
 	}
 	return (0);
 }
