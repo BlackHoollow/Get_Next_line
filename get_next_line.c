@@ -6,7 +6,7 @@
 /*   By: nromptea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 14:38:11 by nromptea          #+#    #+#             */
-/*   Updated: 2016/01/29 21:06:19 by nromptea         ###   ########.fr       */
+/*   Updated: 2016/02/01 16:19:48 by nromptea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ static int		ft_read(int fd, char *rest[fd])
 		rest[fd] = ft_strjoin(swp, buff);
 		ft_strdel(&swp);
 	}
-	ft_strdel(&buff);
 	if (ret == -1)
 		return (-1);
+	ft_strdel(&buff);
 	if (ret == 0 && !c)
 		return (0);
 	return (1);
@@ -64,8 +64,12 @@ int				get_next_line(int const fd, char **line)
 		return (-1);
 	if (ret == 0)
 	{
-		*line = rest[fd];
-		rest[fd] = NULL;
+		if (ft_strlen(rest[fd]) > 0)
+		{
+			*line = rest[fd];
+			rest[fd] = NULL;
+			return (1);
+		}
 		return (0);
 	}
 	*line = first_line(rest[fd]);
